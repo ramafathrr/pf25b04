@@ -1,38 +1,14 @@
-import java.awt.Image;
-import java.net.URL;
-import javax.swing.ImageIcon;
-
 public enum Seed {   // to save as "Seed.java"
-    CROSS("X", "images/cross.gif"),   // displayName, imageFilename
-    NOUGHT("O", "images/not.gif"),
-    NO_SEED(" ", null);
+    CROSS("X"), NOUGHT("O"), NO_SEED(" ");
 
-    // Private variables
-    private String displayName;
-    private Image img = null;
-
+    // Private variable
+    private String icon;
     // Constructor (must be private)
-    private Seed(String name, String imageFilename) {
-        this.displayName = name;
-
-        if (imageFilename != null) {
-            URL imgURL = getClass().getClassLoader().getResource(imageFilename);
-            ImageIcon icon = null;
-            if (imgURL != null) {
-                icon = new ImageIcon(imgURL);
-                //System.out.println(icon);  // debugging
-            } else {
-                System.err.println("Couldn't find file " + imageFilename);
-            }
-            img = icon.getImage();
-        }
+    private Seed(String icon) {
+        this.icon = icon;
     }
-
-    // Public getters
-    public String getDisplayName() {
-        return displayName;
-    }
-    public Image getImage() {
-        return img;
+    // Public Getter
+    public String getIcon() {
+        return icon;
     }
 }
