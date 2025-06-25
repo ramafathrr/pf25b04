@@ -18,9 +18,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * For Eclipse, place the audio file under "src", which will be copied into "bin".
  */
 public enum SoundEffect {
-    EAT_FOOD("audio/eatfood.wav"),
-    EXPLODE("audio/explode.wav"),
-    DIE("audio/die.wav");
+    BLOOD("audio/blood.wav");
 
     /**
      * Nested enumeration for specifying volume
@@ -41,20 +39,24 @@ public enum SoundEffect {
      */
     private SoundEffect(String soundFileName) {
         try {
-            // Use URL (instead of File) to read from disk and JAR.
             URL url = this.getClass().getClassLoader().getResource(soundFileName);
-            // Set up an audio input stream piped from the sound file.
+            System.out.println("Loading sound: " + soundFileName + " => " + url); // ✅ Debug print
+            if (url == null) {
+                throw new IllegalArgumentException("❌ Sound file not found: " + soundFileName);
+            }
+
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
-            // Get a clip resource.
             clip = AudioSystem.getClip();
-            // Open audio clip and load samples from the audio input stream.
             clip.open(audioInputStream);
+
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (LineUnavailableException e) {
             e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());  // Print missing file error
         }
     }
 

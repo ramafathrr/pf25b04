@@ -79,6 +79,8 @@ public class TTTGraphics extends JFrame {
                         // Switch player
                         currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
 
+                        SoundEffect.BLOOD.play();
+
                         if (gameMode == GameMode.PVC && currentPlayer == Seed.NOUGHT && currentState == State.PLAYING) {
                             Timer timer = new Timer(500, new ActionListener() {
                                 public void actionPerformed(ActionEvent evt) {
@@ -115,6 +117,7 @@ public class TTTGraphics extends JFrame {
         pack();  // pack all the components in this JFrame
         setTitle("Tic Tac Toe");
         setVisible(true);  // show this JFrame
+        SoundEffect.initGame();
 
         newGame();
     }
