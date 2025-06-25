@@ -4,6 +4,7 @@ public class WelcomeScreen {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Welcome");
+            BackgroundMusic.play("audio/museum.wav");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setContentPane(new WelcomePanel(frame));
             frame.pack();                        // <== IMPORTANT
