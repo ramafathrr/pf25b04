@@ -7,6 +7,11 @@ import javax.swing.*;
 public class TTTGraphics extends JFrame {
     private static final long serialVersionUID = 1L; // to prevent serializable warning
 
+    private Image backgroundImg;
+
+    private String playerXName = "Player X";
+    private String playerOName = "Player O";
+
     // Define named constants for the game board
     public static final int ROWS = 3;  // ROWS x COLS cells
     public static final int COLS = 3;
@@ -79,7 +84,13 @@ public class TTTGraphics extends JFrame {
                         // Switch player
                         currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
 
-                        SoundEffect.BLOOD.play();
+                        SoundEffect.PLAY.play();
+
+                        if (currentState == State.CROSS_WON || currentState == State.NOUGHT_WON) {
+                            SoundEffect.WIN.play();  // 🎉 suara menang
+                        } else if (currentState == State.DRAW) {
+                            SoundEffect.DRAW.play(); // 🤝 suara draw
+                        }
 
                         if (gameMode == GameMode.PVC && currentPlayer == Seed.NOUGHT && currentState == State.PLAYING) {
                             Timer timer = new Timer(500, new ActionListener() {
@@ -118,6 +129,18 @@ public class TTTGraphics extends JFrame {
         setTitle("Tic Tac Toe");
         setVisible(true);  // show this JFrame
         SoundEffect.initGame();
+        // Load background image
+        backgroundImg = new ImageIcon(getClass().getClassLoader().getResource("assets/bg-tictactoe.png")).getImage();
+
+        playerXName = JOptionPane.showInputDialog(this, "Insert Player X's name (CROSS):", "Nama Pemain", JOptionPane.PLAIN_MESSAGE);
+        if (playerXName == null || playerXName.trim().isEmpty()) {
+            playerXName = "Player X";
+        }
+        playerOName = JOptionPane.showInputDialog(this, "Insert Player O's name (NOUGHT):", "Nama Pemain", JOptionPane.PLAIN_MESSAGE);
+        if (playerOName == null || playerOName.trim().isEmpty()) {
+            playerOName = "Player O";
+        }
+
 
         newGame();
     }
@@ -185,7 +208,16 @@ public class TTTGraphics extends JFrame {
         @Override
         public void paintComponent(Graphics g) {  // Callback via repaint()
             super.paintComponent(g);
-            setBackground(COLOR_BG);  // set its background color
+            if (backgroundImg != null) {
+                Graphics2D g2d = (Graphics2D) g.create();  // buat salinan agar tidak pengaruh ke bagian lain
+                float opacity = 0.3f; // 0.0 = transparan penuh, 1.0 = tidak transparan
+                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+                g2d.drawImage(backgroundImg, 0, 0, getWidth(), getHeight(), this);
+                g2d.dispose(); // hapus objek untuk menghindari memory leak
+
+            } else {
+                setBackground(COLOR_BG);  // fallback if image not found
+            }
 
             // Draw the grid lines
             g.setColor(COLOR_GRID);
@@ -223,16 +255,16 @@ public class TTTGraphics extends JFrame {
             // Print status message
             if (currentState == State.PLAYING) {
                 statusBar.setForeground(Color.BLACK);
-                statusBar.setText((currentPlayer == Seed.CROSS) ? "X's Turn" : "O's Turn");
+                statusBar.setText((currentPlayer == Seed.CROSS) ? playerXName+"'s Turn" : playerOName+"'s Turn");
             } else if (currentState == State.DRAW) {
                 statusBar.setForeground(Color.RED);
                 statusBar.setText("It's a Draw! Click to play again");
             } else if (currentState == State.CROSS_WON) {
                 statusBar.setForeground(Color.RED);
-                statusBar.setText("'X' Won! Click to play again");
+                statusBar.setText(playerXName + " Won! Click to play again");
             } else if (currentState == State.NOUGHT_WON) {
                 statusBar.setForeground(Color.RED);
-                statusBar.setText("'O' Won! Click to play again");
+                statusBar.setText( playerOName + " Won! Click to play again");
             }
         }
     }

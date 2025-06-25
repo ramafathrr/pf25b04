@@ -18,7 +18,9 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * For Eclipse, place the audio file under "src", which will be copied into "bin".
  */
 public enum SoundEffect {
-    BLOOD("audio/blood.wav");
+    PLAY("audio/blood.wav"),
+    WIN("audio/ikznapuZ8PsP.128.wav"),
+    DRAW("audio/ikznapuZ8PsP.128.wav");
 
     /**
      * Nested enumeration for specifying volume

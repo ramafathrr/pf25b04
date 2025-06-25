@@ -8,11 +8,11 @@ import java.util.Locale;
     public class MySqlExample {
         public static void main(String[] args) throws ClassNotFoundException {
             String host, port, databaseName, userName, password;
-            host ="mysql-tictactoe-finalprojectb-04.c.aivencloud.com";
-            port ="23279";
+            host ="mysql-3fdaaac7-fp-basicprog-group4.c.aivencloud.com";
+            port ="13397";
             databaseName ="defaultdb";
             userName ="avnadmin";
-            password = "AVNS_AZW1YUcxCEjfh7qis1_";
+            password = "AVNS_SbT0Kjs8nsUj-19xZjA";
 //        for (int i = 0; i < args.length - 1; i++) {
 //            switch (args[i].toLowerCase(Locale.ROOT)) {
 //                case "-host": host = args[++i]; break;
