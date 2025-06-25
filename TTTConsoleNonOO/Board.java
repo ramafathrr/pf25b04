@@ -89,4 +89,47 @@ public class Board {  // save as "Board.java"
         }
         System.out.println();
     }
+        private static int crossWins = 0;
+    private static int noughtWins = 0;
+    private static int draws = 0;
+
+    // data undo
+    private static int lastRow = -1;
+    private static int lastCol = -1;
+    private static Seed lastPlayer = Seed.NO_SEED;
+
+    // simpan langkah sebelum dihapus
+    public static void setLastMove(int row, int col, Seed player) {
+        lastRow = row;
+        lastCol = col;
+        lastPlayer = player;
+    }
+
+    // batalkan langkah terakhir
+    public static void undoLastMove(Board b) {
+        if (lastRow >= 0) {
+            b.cells[lastRow][lastCol].content = Seed.NO_SEED;
+            lastRow = lastCol = -1;
+            lastPlayer = Seed.NO_SEED;
+            b.paint();
+        } else {
+            System.out.println("No move to undo.");
+        }
+    }
+
+    // catat hasil tiap game
+    private static void recordResult(State result) {
+        switch (result) {
+            case CROSS_WON:  crossWins++;  break;
+            case NOUGHT_WON: noughtWins++; break;
+            case DRAW:       draws++;      break;
+            default:                     break;
+        }
+    }
+
+    // cetak scoreboard
+    public static void printScoreboard() {
+        System.out.println("X wins   : " + crossWins);
+        System.out.println("O wins   : " + noughtWins);
+        System.out.println("Draws    : " + draws);
 }
