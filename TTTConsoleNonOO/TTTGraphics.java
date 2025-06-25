@@ -43,6 +43,11 @@ public class TTTGraphics extends JFrame {
     private Seed currentPlayer; // the current player
     private Seed[][] board;     // Game board of ROWS-by-COLS cells
 
+    public enum GameMode {
+        PVP, PVC
+    }
+    private GameMode gameMode = GameMode.PVP; // default mode
+
     // UI Components
     private GamePanel gamePanel; // Drawing canvas (JPanel) for the game board
     private JLabel statusBar;  // Status Bar
@@ -73,6 +78,17 @@ public class TTTGraphics extends JFrame {
                         currentState = stepGame(currentPlayer, row, col);
                         // Switch player
                         currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
+
+                        if (gameMode == GameMode.PVC && currentPlayer == Seed.NOUGHT && currentState == State.PLAYING) {
+                            Timer timer = new Timer(500, new ActionListener() {
+                                public void actionPerformed(ActionEvent evt) {
+                                    computerMove();
+                                    repaint();
+                                }
+                            });
+                            timer.setRepeats(false); // run only once
+                            timer.start();
+                        }
                     }
                 } else {       // game over
                     newGame(); // restart the game
@@ -227,5 +243,27 @@ public class TTTGraphics extends JFrame {
                 new TTTGraphics(); // Let the constructor do the job
             }
         });
+    }
+    public TTTGraphics(GameMode mode) {
+        this(); // call default constructor
+        this.gameMode = mode;
+    }
+    private void computerMove() {
+        java.util.List<int[]> availableMoves = new java.util.ArrayList<>();
+        for (int row = 0; row < ROWS; ++row) {
+            for (int col = 0; col < COLS; ++col) {
+                if (board[row][col] == Seed.NO_SEED) {
+                    availableMoves.add(new int[]{row, col});
+                }
+            }
+        }
+
+        if (!availableMoves.isEmpty()) {
+            int[] move = availableMoves.get((int)(Math.random() * availableMoves.size()));
+            int row = move[0];
+            int col = move[1];
+            currentState = stepGame(currentPlayer, row, col);
+            currentPlayer = Seed.CROSS; // back to human
+        }
     }
 }

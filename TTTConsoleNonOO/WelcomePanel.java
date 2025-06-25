@@ -15,9 +15,13 @@ public class WelcomePanel extends JPanel {
         backgroundLabel.setLayout(null);
 
         // ✅ Add start button
-        JButton startButton = new JButton("Start Game");
-        startButton.setBounds(175, 250, 150, 40); // tweak position if needed
-        backgroundLabel.add(startButton);
+        JButton pvpButton = new JButton("Player vs Player");
+        pvpButton.setBounds(150, 200, 180, 40);
+        backgroundLabel.add(pvpButton);
+
+        JButton pvcButton = new JButton("Player vs Computer");
+        pvcButton.setBounds(150, 260, 180, 40);
+        backgroundLabel.add(pvcButton);
 
         // ✅ Set panel size to match GIF
         setPreferredSize(new Dimension(gifIcon.getIconWidth(), gifIcon.getIconHeight()));
@@ -26,11 +30,14 @@ public class WelcomePanel extends JPanel {
         add(backgroundLabel);
 
         // ✅ Button action
-        startButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                parentFrame.dispose();
-                new TTTGraphics(); // open game window
-            }
+        pvpButton.addActionListener(e -> {
+            parentFrame.dispose();
+            new TTTGraphics(TTTGraphics.GameMode.PVP);
+        });
+
+        pvcButton.addActionListener(e -> {
+            parentFrame.dispose();
+            new TTTGraphics(TTTGraphics.GameMode.PVC);
         });
     }
 }
